@@ -1,0 +1,99 @@
+<div class="min-h-screen flex items-center justify-center px-4" style="background: radial-gradient(ellipse at center, #1a3d2b 0%, #0d2118 100%); font-family: 'Georgia', 'Times New Roman', serif;">
+
+  <!-- Felt texture overlay -->
+  <div class="fixed inset-0 opacity-20 pointer-events-none" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%23000%22 opacity=%220.1%22/><circle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23fff%22 opacity=%220.05%22/></svg>');"></div>
+
+  <div class="relative w-full max-w-md">
+
+    <!-- Gold border card -->
+    <div class="relative rounded-2xl p-px" style="background: linear-gradient(145deg, #c9a84c, #7a5c1e, #c9a84c, #5a4010);">
+      <div class="rounded-2xl p-8" style="background: linear-gradient(160deg, #1c2e22 0%, #142018 100%);">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="flex justify-center gap-3 mb-3 text-2xl">♠ ♥ ♦ ♣</div>
+          <h1 class="text-4xl font-bold tracking-widest uppercase" style="color: #c9a84c; text-shadow: 0 0 30px rgba(201,168,76,0.4); letter-spacing: 0.15em;">Blackjack</h1>
+          <div class="mt-2 h-px w-24 mx-auto" style="background: linear-gradient(to right, transparent, #c9a84c, transparent);"></div>
+        </div>
+
+        <!-- Flash alert -->
+        <% if flash[:alert] %>
+          <div class="mb-5 px-4 py-3 rounded-lg text-sm text-center" style="background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.4); color: #fca5a5;">
+            <%= flash[:alert] %>
+          </div>
+        <% end %>
+
+        <!-- Balance -->
+        <div class="text-center mb-8">
+          <p class="text-xs uppercase tracking-widest mb-1" style="color: #6b9e7a;">Wallet Balance</p>
+          <p class="text-5xl font-bold" style="color: <%= @balance > 0 ? '#c9a84c' : '#ef4444' %>; text-shadow: 0 0 20px <%= @balance > 0 ? 'rgba(201,168,76,0.3)' : 'rgba(239,68,68,0.3)' %>;">
+            $<%= @balance %>
+          </p>
+        </div>
+
+        <% if @balance > 0 %>
+          <!-- Bet form -->
+          <%= form_with url: games_path, method: :post, class: "space-y-5" do |f| %>
+            <div>
+              <label for="bet" class="block text-xs uppercase tracking-widest mb-2" style="color: #6b9e7a;">
+                Place Your Bet
+              </label>
+              <input
+                type="number"
+                name="bet"
+                id="bet"
+                min="1"
+                max="<%= @balance %>"
+                value="<%= [ 100, @balance ].min %>"
+                required
+                class="w-full px-4 py-3 rounded-lg text-white text-lg outline-none transition-all duration-200"
+                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); color: #e8d5a3;"
+                onfocus="this.style.borderColor='rgba(201,168,76,0.8)'; this.style.boxShadow='0 0 0 3px rgba(201,168,76,0.1)';"
+                onblur="this.style.borderColor='rgba(201,168,76,0.3)'; this.style.boxShadow='none';"
+                />
+              <p class="text-xs mt-1" style="color: #4a7a5a;">Min: $1 &nbsp;·&nbsp; Max: $<%= @balance %></p>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-3 px-4 rounded-lg font-bold uppercase tracking-widest text-sm transition-all duration-200"
+              style="background: linear-gradient(135deg, #c9a84c, #a07830); color: #1a2e22; letter-spacing: 0.1em;"
+              onmouseover="this.style.background='linear-gradient(135deg, #dbb95a, #b08840)'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 20px rgba(201,168,76,0.4)';"
+              onmouseout="this.style.background='linear-gradient(135deg, #c9a84c, #a07830)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+            >
+              ♠ Deal Me In
+            </button>
+          <% end %>
+
+        <% else %>
+          <!-- Game over state -->
+          <div class="mb-5 rounded-xl p-6 text-center" style="background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.3);">
+            <p class="text-2xl font-bold mb-1" style="color: #f87171;">Game Over</p>
+            <p class="text-sm" style="color: #9ca3af;">You're out of chips. Better luck next time.</p>
+          </div>
+
+          <%= link_to "Start New Game", new_game_path(new_game: true),
+                      class: "block w-full py-3 px-4 rounded-lg font-bold uppercase tracking-widest text-sm text-center transition-all duration-200",
+                      style: "background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; letter-spacing: 0.1em;",
+                      onmouseover: "this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 20px rgba(59,130,246,0.4)';",
+                      onmouseout: "this.style.transform='translateY(0)'; this.style.boxShadow='none';" %>
+        <% end %>
+
+        <div class="mt-8 pt-6" style="border-top: 1px solid rgba(201,168,76,0.15);">
+          <h2 class="text-xs uppercase tracking-widest mb-4" style="color: #6b9e7a;">Rules of Black Jack</h2>
+          <ul class="space-y-2 text-xs" style="color: #5a7a65;">
+            <li>· The goal is to beat the Dealer by holding a hand value closer to 21 — without exceeding it</li>
+            <li>· Bust over 21 and the hand is lost, regardless of what the dealer holds</li>
+            <li>· Number cards are face value; Jacks, Queens, and Kings count as 10</li>
+            <li>· Aces play as 1 or 11 — whichever keeps your hand alive</li>
+            <li>· The dealer must hit/draw on 16 or below and must stop at 17 or above</li>
+            <li>· A natural Blackjack — 21 dealt in your opening two cards — pays out 2.5X your betting amount</li>
+          </ul>
+          <p class="mt-4 text-xs">
+            <%= link_to "Full rules via Bicycle Cards →", "https://bicyclecards.com/how-to-play/blackjack/", target: "_blank", style: "color: #c9a84c; text-decoration: underline; opacity: 0.7;" %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

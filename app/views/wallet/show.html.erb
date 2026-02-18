@@ -1,0 +1,47 @@
+<div class="min-h-screen flex items-center justify-center px-4" style="background: radial-gradient(ellipse at center, #1a3d2b 0%, #0d2118 100%); font-family: 'Georgia', 'Times New Roman', serif;">
+
+  <div class="fixed inset-0 opacity-20 pointer-events-none" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%23000%22 opacity=%220.1%22/><circle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23fff%22 opacity=%220.05%22/></svg>');"></div>
+
+  <div class="relative w-full max-w-sm">
+    <div class="rounded-2xl p-px" style="background: linear-gradient(145deg, #c9a84c, #7a5c1e, #c9a84c, #5a4010);">
+      <div class="rounded-2xl p-10 text-center" style="background: linear-gradient(160deg, #1c2e22 0%, #142018 100%);">
+
+        <!-- Icon -->
+        <div class="text-5xl mb-6">♠</div>
+
+        <!-- Title -->
+        <p class="text-xs uppercase tracking-widest mb-2" style="color: #6b9e7a;">Final Balance</p>
+        <div class="h-px w-16 mx-auto mb-6" style="background: linear-gradient(to right, transparent, #c9a84c, transparent);"></div>
+
+        <!-- Balance -->
+        <p class="text-6xl font-bold mb-2" style="color: <%= @balance > 0 ? '#c9a84c' : '#f87171' %>; text-shadow: 0 0 40px <%= @balance > 0 ? 'rgba(201,168,76,0.4)' : 'rgba(248,113,113,0.4)' %>;">
+          $<%= @balance %>
+        </p>
+
+        <!-- Flavour text -->
+        <p class="text-sm mt-4 mb-8" style="color: #4a7a5a;">
+          <% if @balance > 1000 %>
+            You walked away ahead. Well played.
+          <% elsif @balance == 1000 %>
+            Broke even. The house respects a clean exit.
+          <% elsif @balance > 0 %>
+            You lost some, but kept your dignity.
+          <% else %>
+            The house always wins. Eventually.
+          <% end %>
+        </p>
+
+        <div class="h-px mb-8" style="background: linear-gradient(to right, transparent, rgba(201,168,76,0.2), transparent);"></div>
+
+        <!-- CTA -->
+        <%= link_to "Play Again", new_game_path(new_game: true),
+                    class: "block w-full py-3 px-6 rounded-xl font-bold uppercase tracking-widest text-sm text-center transition-all duration-200",
+                    style: "background: linear-gradient(135deg, #c9a84c, #a07830); color: #1a2e22; box-shadow: 0 4px 15px rgba(201,168,76,0.2);",
+                    onmouseover: "this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(201,168,76,0.4)';",
+                    onmouseout:  "this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(201,168,76,0.2)';" %>
+
+      </div>
+    </div>
+  </div>
+
+</div>

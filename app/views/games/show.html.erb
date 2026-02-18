@@ -1,0 +1,166 @@
+<div class="min-h-screen p-4 flex flex-col items-center justify-start" style="background: radial-gradient(ellipse at center, #1a3d2b 0%, #0d2118 100%); font-family: 'Georgia', 'Times New Roman', serif;">
+
+  <!-- Felt texture overlay -->
+  <div class="fixed inset-0 opacity-20 pointer-events-none" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%23000%22 opacity=%220.1%22/><circle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23fff%22 opacity=%220.05%22/></svg>');"></div>
+
+  <div class="relative w-full max-w-3xl">
+
+    <!-- Header: Balance & Bet -->
+    <div class="rounded-2xl p-px mb-4" style="background: linear-gradient(145deg, #c9a84c, #7a5c1e, #c9a84c, #5a4010);">
+      <div class="rounded-2xl px-8 py-5 flex justify-between items-center" style="background: linear-gradient(160deg, #1c2e22 0%, #142018 100%);">
+        <div>
+          <p class="text-xs uppercase tracking-widest mb-1" style="color: #6b9e7a;">Your Balance</p>
+          <p class="text-3xl font-bold" style="color: #c9a84c; text-shadow: 0 0 20px rgba(201,168,76,0.3);">$<%= @game.bankroll %></p>
+        </div>
+        <div class="text-center">
+          <div class="flex gap-2 text-xl" style="color: #c9a84c; opacity: 0.6;">♠ ♥ ♦ ♣</div>
+          <p class="text-xl font-bold tracking-widest uppercase mt-1" style="color: #c9a84c;">Blackjack</p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs uppercase tracking-widest mb-1" style="color: #6b9e7a;">Your Bet</p>
+          <p class="text-3xl font-bold" style="color: #93c5fd; text-shadow: 0 0 20px rgba(147,197,253,0.3);">$<%= @game.wager %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BlackJack Table -->
+    <div class="rounded-2xl p-px mb-4" style="background: linear-gradient(145deg, #c9a84c44, #7a5c1e44);">
+      <div class="rounded-2xl p-8" style="background: linear-gradient(160deg, #163524 0%, #0f2318 100%); border: 1px solid rgba(201,168,76,0.1);">
+
+        <!-- Dealer Section -->
+        <div class="mb-10">
+          <div class="flex items-baseline gap-3 mb-5">
+            <h2 class="text-lg uppercase tracking-widest font-semibold" style="color: #c9a84c;">Dealer</h2>
+            <span class="text-sm px-2 py-0.5 rounded" style="color: #6b9e7a; background: rgba(107,158,122,0.1); border: 1px solid rgba(107,158,122,0.2);">
+              <%= @game.dealer_hidden_card? ? @game.upcard_value : @game.dealer_score %>
+            </span>
+          </div>
+          <div class="flex gap-3 flex-wrap">
+            <% @game.house_hand.each_with_index do |card, index| %>
+              <% if index == 1 && @game.dealer_hidden_card? %>
+                <div class="w-20 h-28 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #1a3a6b, #0f2244); border: 2px solid rgba(201,168,76,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                  <div class="text-4xl" style="color: rgba(201,168,76,0.4);">?</div>
+                </div>
+              <% else %>
+                <div class="w-20 h-28 rounded-xl flex flex-col items-center justify-center gap-1 p-2" style="background: linear-gradient(135deg, #fffef8, #f5f0e8); border: 2px solid rgba(201,168,76,0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                  <div class="text-3xl font-bold leading-none" style="color: <%= card['suit'].in?(['♥', '♦']) ? '#dc2626' : '#1a1a1a' %>;">
+                    <%= card['rank'] %>
+                  </div>
+                  <div class="text-2xl leading-none" style="color: <%= card['suit'].in?(['♥', '♦']) ? '#dc2626' : '#1a1a1a' %>;">
+                    <%= card['suit'] %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mb-10 h-px" style="background: linear-gradient(to right, transparent, rgba(201,168,76,0.2), transparent);"></div>
+
+        <!-- Score of the Player -->
+        <div>
+          <div class="flex items-baseline gap-3 mb-5">
+            <h2 class="text-lg uppercase tracking-widest font-semibold" style="color: #c9a84c;">You</h2>
+            <span class="text-sm px-2 py-0.5 rounded" style="color: #6b9e7a; background: rgba(107,158,122,0.1); border: 1px solid rgba(107,158,122,0.2);">
+              <%= @game.player_score %>
+            </span>
+          </div>
+          <div class="flex gap-3 flex-wrap">
+            <% @game.player_hand.each do |card| %>
+              <div class="w-20 h-28 rounded-xl flex flex-col items-center justify-center gap-1 p-2" style="background: linear-gradient(135deg, #fffef8, #f5f0e8); border: 2px solid rgba(201,168,76,0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                <div class="text-3xl font-bold leading-none" style="color: <%= card['suit'].in?(['♥', '♦']) ? '#dc2626' : '#1a1a1a' %>;"><%= card['rank'] %></div>
+                <div class="text-2xl leading-none" style="color: <%= card['suit'].in?(['♥', '♦']) ? '#dc2626' : '#1a1a1a' %>;"><%= card['suit'] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- State of Game -->
+    <% if @game.finished? %>
+      <div class="rounded-2xl p-px mb-4" style="background: linear-gradient(145deg, #c9a84c, #7a5c1e, #c9a84c);">
+
+        <% if @game.outcome == 'player_blackjack' %>
+          <!-- Celebratory Blackjack Banner -->
+          <div class="relative overflow-hidden rounded-2xl py-6 px-8 text-center" style="background: linear-gradient(160deg, #1c2e22 0%, #142018 100%);">
+
+            <!-- Radiating glow backdrop -->
+            <div class="absolute inset-0 rounded-2xl animate-pulse" style="background: radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, transparent 70%);"></div>
+
+            <!-- Corner suit pings -->
+            <div class="absolute top-2 left-4 text-lg animate-ping" style="color: rgba(201,168,76,0.4); animation-duration: 2s;">♠</div>
+            <div class="absolute top-2 right-4 text-lg animate-ping" style="color: rgba(201,168,76,0.4); animation-duration: 2.3s;">♣</div>
+            <div class="absolute bottom-2 left-4 text-lg animate-ping" style="color: rgba(201,168,76,0.4); animation-duration: 1.8s;">♦</div>
+            <div class="absolute bottom-2 right-4 text-lg animate-ping" style="color: rgba(201,168,76,0.4); animation-duration: 2.1s;">♥</div>
+
+            <!-- Main text -->
+            <div class="relative">
+              <p class="text-5xl font-bold tracking-widest uppercase animate-bounce" style="color: #c9a84c; text-shadow: 0 0 40px rgba(201,168,76,0.8), 0 0 80px rgba(201,168,76,0.4);">
+                ♠ BLACKJACK ♠
+              </p>
+              <p class="text-sm uppercase tracking-widest mt-3 animate-pulse" style="color: #6b9e7a; animation-duration: 1.5s;">
+                You won $<%= (@game.wager * 1.5).to_i %>!
+              </p>
+            </div>
+
+          </div>
+
+        <% else %>
+          <!-- All other outcomes -->
+          <div class="rounded-2xl py-6 px-8 text-center" style="background: linear-gradient(160deg, #1c2e22 0%, #142018 100%);">
+            <% case @game.outcome %>
+            <% when 'player_wins' %>
+              <p class="text-4xl font-bold mb-1" style="color: #4ade80; text-shadow: 0 0 30px rgba(74,222,128,0.4);">You Win!</p>
+              <p class="text-sm uppercase tracking-widest" style="color: #6b9e7a;">You won $<%= @game.wager %>!</p>
+            <% when 'dealer_blackjack' %>
+              <p class="text-4xl font-bold mb-1" style="color: #f87171; text-shadow: 0 0 30px rgba(248,113,113,0.4);">Natural 21 — Dealer</p>
+              <p class="text-sm uppercase tracking-widest" style="color: #9ca3af;">You lost $<%= @game.wager %></p>
+            <% when 'dealer_wins' %>
+              <p class="text-4xl font-bold mb-1" style="color: #f87171; text-shadow: 0 0 30px rgba(248,113,113,0.4);">Dealer Won</p>
+              <p class="text-sm uppercase tracking-widest" style="color: #9ca3af;">You lost $<%= @game.wager %></p>
+            <% when 'push' %>
+              <p class="text-4xl font-bold mb-1" style="color: #93c5fd; text-shadow: 0 0 30px rgba(147,197,253,0.4);">Push</p>
+              <p class="text-sm uppercase tracking-widest" style="color: #9ca3af;">Nobody wins. Nobody loses.</p>
+            <% end %>
+          </div>
+        <% end %>
+
+      </div>
+    <% end %>
+    <!-- End State of Game -->
+
+    <!-- Player interactions -->
+    <div class="flex gap-3">
+      <% if @game.player_turn? %>
+        <%= button_to "Hit", hit_game_path(@game), method: :post,
+                      class: "flex-1 py-3 px-6 rounded-xl font-bold uppercase tracking-widest text-sm transition-all duration-200",
+                      style: "background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid rgba(147,197,253,0.3); box-shadow: 0 4px 15px rgba(59,130,246,0.2);",
+                      form: { onmouseover: "this.querySelector('button').style.transform='translateY(-1px)'; this.querySelector('button').style.boxShadow='0 6px 20px rgba(59,130,246,0.4)';",
+                              onmouseout:  "this.querySelector('button').style.transform='translateY(0)'; this.querySelector('button').style.boxShadow='0 4px 15px rgba(59,130,246,0.2)';" } %>
+        <%= button_to "No More", no_more_game_path(@game), method: :post,
+                      class: "flex-1 py-3 px-6 rounded-xl font-bold uppercase tracking-widest text-sm transition-all duration-200",
+                      style: "background: linear-gradient(135deg, #c9a84c, #a07830); color: #1a2e22; border: 1px solid rgba(201,168,76,0.3); box-shadow: 0 4px 15px rgba(201,168,76,0.2);",
+                      form: { onmouseover: "this.querySelector('button').style.transform='translateY(-1px)'; this.querySelector('button').style.boxShadow='0 6px 20px rgba(201,168,76,0.4)';",
+                              onmouseout:  "this.querySelector('button').style.transform='translateY(0)'; this.querySelector('button').style.boxShadow='0 4px 15px rgba(201,168,76,0.2)';" } %>
+      <% end %>
+
+      <!-- New game or show wallet balance -->
+      <% if @game.finished? %>
+        <%= link_to "Play another round", new_game_path,
+                    class: "flex-1 py-3 px-6 rounded-xl font-bold uppercase tracking-widest text-sm text-center transition-all duration-200",
+                    style: "background: linear-gradient(135deg, #16a34a, #15803d); color: white; border: 1px solid rgba(74,222,128,0.3); box-shadow: 0 4px 15px rgba(22,163,74,0.2);",
+                    onmouseover: "this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(22,163,74,0.4)';",
+                    onmouseout:  "this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(22,163,74,0.2)';" %>
+        <%= link_to "Nope, I'm done", show_my_wallet_path,
+                    class: "flex-1 py-3 px-6 rounded-xl font-bold uppercase tracking-widest text-sm text-center transition-all duration-200",
+                    style: "background: linear-gradient(135deg, #dc2626, #991b1b); color: white; border: 1px solid rgba(248,113,113,0.3); box-shadow: 0 4px 15px rgba(220,38,38,0.2);",
+                    onmouseover: "this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(220,38,38,0.4)';",
+                    onmouseout:  "this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(220,38,38,0.2)';" %>
+      <% end %>
+    </div>
+    <!-- End Player interactions -->
+  </div>
+</div>
